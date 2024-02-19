@@ -9,30 +9,39 @@ const metascraper_title_1 = __importDefault(require("metascraper-title"));
 const metascraper_author_1 = __importDefault(require("metascraper-author"));
 const metascraper_publisher_1 = __importDefault(require("metascraper-publisher"));
 const metascraper_date_1 = __importDefault(require("metascraper-date"));
+const metascraper_semanticscholar_js_1 = __importDefault(require("./metascraper-semanticscholar.js"));
 (() => {
-    const scrap = metascraper_1.default([
-        metascraper_url_1.default(),
-        metascraper_title_1.default(),
-        metascraper_author_1.default(),
-        metascraper_publisher_1.default(),
-        metascraper_date_1.default(),
+    const scrap = (0, metascraper_1.default)([
+        (0, metascraper_semanticscholar_js_1.default)(),
+        (0, metascraper_url_1.default)(),
+        (0, metascraper_title_1.default)(),
+        (0, metascraper_author_1.default)(),
+        (0, metascraper_publisher_1.default)(),
+        (0, metascraper_date_1.default)(),
     ]);
     function getDoi(document) {
+        const DOI_REGEX = /10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
         let doi = null;
         const doiNode = document.querySelector('meta[name="citation_doi"]');
-        doi = doiNode === null || doiNode === void 0 ? void 0 : doiNode.content;
+        doi = doiNode?.content;
         if (typeof doi !== 'undefined') {
             return doi;
         }
         const citationNode = document.querySelector('meta[name="citation_pdf_url"]');
-        doi = citationNode === null || citationNode === void 0 ? void 0 : citationNode.content;
-        if (typeof doi !== 'undefined') {
-            return doi.match(/10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i)[0];
+        doi = citationNode?.content;
+        if (typeof doi !== 'undefined' && doi.match(DOI_REGEX)) {
+            return doi.match(DOI_REGEX)[0];
+        }
+        // for semantic scholor
+        const doiLinkNode = document.querySelector('a.doi__link');
+        doi = doiLinkNode?.text;
+        if (typeof doi !== 'undefined' && doi.match(DOI_REGEX)) {
+            return doi.match(DOI_REGEX)[0];
         }
         return null;
     }
     scrap({ url: location.href, html: document.documentElement.innerHTML }).then(paper => {
-        // const url = location.href;
+        const url = location.href;
         const tab = '        ';
         let text = '';
         if (window.getSelection().toString() !== '') {
@@ -51,7 +60,7 @@ const metascraper_date_1 = __importDefault(require("metascraper-date"));
         const doi = getDoi(document);
         const doiTemplate = doi ? `\ndoi:: ${doi}\nn:: ` : '';
         const templ = `${title}
-[link](${location.href})${doiTemplate}
+[link](${url})${doiTemplate}
 auth:: ${auths}
 pub:: ${pub}
 date:: ${date}

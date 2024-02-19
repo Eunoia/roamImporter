@@ -2,7 +2,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es2021",
+    "allowJs": true,
     "noImplicitAny": false,
     "moduleResolution": "node",
     "sourceMap": true,
