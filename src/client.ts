@@ -28,6 +28,7 @@ import metascraperSemanticscholar from './metascraper-semanticscholar.js';
     if (typeof doi !== 'undefined' && doi.match(DOI_REGEX)) {
       return doi.match(DOI_REGEX)[0];
     }
+
     // for semantic scholor
     const doiLinkNode = document.querySelector<HTMLAnchorElement>('a.doi__link');
     doi = doiLinkNode?.text;

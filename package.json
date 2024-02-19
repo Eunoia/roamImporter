@@ -45,16 +45,15 @@
     "tsify": "^5.0.4",
     "typescript": "^5.3.3"
   },
-  "main": "dist/index.js",
+  "main": "dist/client.js",
   "scripts": {
     "clean": "rimraf dist/*",
     "lint": "eslint 'src/**/*.{ts,js}' --fix",
     "tsc": "tsc",
     "build": "npm-run-all clean lint tsc",
     "buildC": "browserify -p tsify dist/client.js -o bundle.js",
-    "dev:start": "npm-run-all build buildC start",
+    "dev:start": "npm-run-all build buildC",
     "dev": "nodemon --watch src -e ts,js --exec npm run dev:start",
-    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
