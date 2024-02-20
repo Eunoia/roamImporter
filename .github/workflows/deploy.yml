@@ -24,7 +24,7 @@ jobs:
     - name: Copy files to dist
       run: |
         mkdir -p dist
-        cp public/install.html dist/index.html
+        cp static/install.html dist/index.html
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
