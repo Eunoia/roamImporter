@@ -1,8 +1,13 @@
 import { $filter, toRule } from '@metascraper/helpers';
 
 const doi = value => {
+  if (typeof value === 'undefined') {
+    return null;
+  }
+
   const DOI_REGEX = /10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
-  return value.match(DOI_REGEX)[0];
+  const match = value.match(DOI_REGEX);
+  return (match && match[0]) || null;
 };
 
 const toDoi = toRule(doi);
