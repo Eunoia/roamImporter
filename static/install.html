@@ -97,7 +97,7 @@
         const productionUrl = 'https://eunoia.github.io/roamImporter/'
     
         document.querySelector("#bookmarklet a").setAttribute('href', "javascript:" + encodeURIComponent(bookmarklet(productionUrl)))
-        if (location.origin.match(/:/)) {
+        if (location.host !== 'localhost') {
             // you can test without deploying via `ngrok http --host-header=rewrite 8080`
             document.querySelector("#bookmarklet_dev a").setAttribute('href', "javascript:" + encodeURIComponent(bookmarklet(location.origin)))
             document.querySelector("#bookmarklet_dev").style.visibility = 'visible'
