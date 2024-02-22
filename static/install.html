@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookmarklet Installation Page</title>
+    <title>Roam Importer</title>
+    <meta name="description" content="A tool for turning webpages into notes for your zettelkasten">
+    <meta name="date" content="2024-02-22">
+    <meta name="publisher" content="Rome Importer">
+    <meta name="author" content="eunoia">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,32 +22,86 @@
             background-color: #ddd;
             display: inline-block;
             cursor: pointer;
+            margin-left: 4em;
+            margin-top: 0px;
         }
         .instructions {
             margin-top: 20px;
         }
+        .figures {
+            display: flex;
+        }
+        .figures > div {
+            flex: 1;
+            margin: 2em;
+        }
+        .figures div p.caption {
+            margin-bottom: .33ex;
+            font-size: 140%;
+            font-style: italic;
+        }
+        img{
+            object-fit: contain;
+            width:100%;
+        }
+         @media (max-width: 768px) {
+            .figures {
+                flex-direction: column;
+                align-items: center;
+            }
+            .figures > div {
+                width: 90%;
+                margin: 1em;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Bookmarklet Installation</h1>
-    <p>Drag the following bookmarklet to your bookmarks bar, or right-click and select "Add to bookmarks" for easier access to [functionality].</p>
-    <div class="bookmarklet" onclick="alert('This is a test. Replace this script with your actual bookmarklet code.');">
-        <a id='bookmarklet' href="">+Roam (dev)</a>
+    <h1>Easily import pages into your zettelkasten on Roam Research</h1>
+    <div class="figures">
+        <div>
+            <p class="caption">Go from this</p>
+            <picture>
+                <source srcset="before.webp" type="image/webp">
+                <img src="before.png" alt="a webpage about bison">
+            </picture>
+        </div>
+        <div>
+            <p class="caption">To this</p>
+            <picture>
+                <source srcset="after.webp" type="image/webp">
+                <img src="after.png" alt="extracted metadata">
+            </picture>
+        </div>
+        <div>
+            <h2>Bookmarklet Installation</h2>
+            <p>Drag the following bookmarklet to your bookmarks bar.</p>
+            <div id="bookmarklet" class="bookmarklet">
+                <a id='bookmarklet' href="">+Roam</a>
+            </div>
+            <div id="bookmarklet_dev" style="visibility:invisible" class="bookmarklet">
+                <a id='bookmarklet' href="">+Roam (dev)</a>
+            </div>
+            <div class="instructions">
+                <h2>Instructions</h2>
+                <p>1. Click and hold on the bookmarklet link above.</p>
+                <p>2. Drag it to your browser's bookmarks bar.</p>
+                <p>3. Release to drop it onto the bar.</p>
+                <p>Now you can click the bookmarklet from your bookmarks bar whenever you need to use it.</p>
+            </div>
+        </div>
     </div>
-    <div class="instructions">
-        <h2>Instructions</h2>
-        <p>1. Click and hold on the bookmarklet link above.</p>
-        <p>2. Drag it to your browser's bookmarks bar.</p>
-        <p>3. Release to drop it onto the bar.</p>
-        <p>Now you can click the bookmarklet from your bookmarks bar whenever you need to use it.</p>
-    </div>
-    <code>
-        (function(){function callback(){console.log('this')}var
-        s=document.createElement('script');s.src='http://localhost:8080/bundle.js';if(s.addEventListener){s.addEventListener('load',callback,false)}else
-        if(s.readyState){s.onreadystatechange=callback}document.body.appendChild(s);})()
-    </code>
     <script>
-        document.querySelector(".bookmarklet a").setAttribute('href', "javascript:"+encodeURIComponent(document.querySelector('code').innerText))
+        const bookmarklet = (url) => `(function(){function callback(){console.log('this')}var s=document.createElement('script');s.src='${url}/bundle.js';if(s.addEventListener){s.addEventListener('load',callback,false)}else if(s.readyState){s.onreadystatechange=callback}document.body.appendChild(s);})()`
+
+        const productionUrl = 'https://eunoia.github.io/roamImporter/'
+    
+        document.querySelector("#bookmarklet a").setAttribute('href', "javascript:" + encodeURIComponent(bookmarklet(productionUrl)))
+        if (location.origin.match(/:/)) {
+            // you can test without deploying via `ngrok http --host-header=rewrite 8080`
+            document.querySelector("#bookmarklet_dev a").setAttribute('href', "javascript:" + encodeURIComponent(bookmarklet(location.origin)))
+            document.querySelector("#bookmarklet_dev").style.visibility = 'visible'
+        }
     </script>
 </body>
 </html>

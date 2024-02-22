@@ -25,6 +25,7 @@ jobs:
       run: |
         mkdir -p dist
         cp static/install.html dist/index.html
+        cp static/*.{png,webp} dist/
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
